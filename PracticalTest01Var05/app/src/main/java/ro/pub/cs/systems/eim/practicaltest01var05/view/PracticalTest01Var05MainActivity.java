@@ -1,8 +1,12 @@
 package ro.pub.cs.systems.eim.practicaltest01var05.view;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -11,13 +15,50 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import ro.pub.cs.systems.eim.practicaltest01var05.R;
 import ro.pub.cs.systems.eim.practicaltest01var05.general.Constants;
+import ro.pub.cs.systems.eim.practicaltest01var05.service.PracticalTest01Var05Service;
 
 public class PracticalTest01Var05MainActivity extends Activity {
     Button topLeftButton, topRightButton, navigateToSecondaryActivityButton, bottomLeftButton, bottomRighButton, centerButton;
     TextView resutView;
     int count;
+
+    private IntentFilter intentFilter = new IntentFilter();
+
+    private int serviceStatus = Constants.SERVICE_STOPPED;
+
+    @Override
+    protected void onDestroy() {
+        Intent intent = new Intent(this, PracticalTest01Var05Service.class);
+        stopService(intent);
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(messageBroadcastReceiver, intentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(messageBroadcastReceiver);
+        super.onPause();
+    }
+
+    private MessageBroadcastReceiver messageBroadcastReceiver = new MessageBroadcastReceiver();
+    private class MessageBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(Constants.BROADCAST_RECEIVER_TAG, intent.getStringExtra(Constants.BROADCAST_RECEIVER_EXTRA));
+        }
+    }
+
     private ButtonClickListener buttonClickListener = new ButtonClickListener();
     private class ButtonClickListener implements View.OnClickListener{
 
@@ -49,6 +90,15 @@ public class PracticalTest01Var05MainActivity extends Activity {
                     intent.putExtra(Constants.RESULT_OPERATION, resutView.getText().toString());
                     startActivityForResult(intent, Constants.SECONDARY_ACTIVITY_REQUEST_CODE);
                     break;
+            }
+            if (count > Constants.NUMBER_OF_CLICKS_THRESHOLD
+                    && serviceStatus == Constants.SERVICE_STOPPED) {
+                Intent intent = new Intent(getApplicationContext(), PracticalTest01Var05Service.class);
+                List<String> sablon = Arrays.asList(resutView.getText().toString().split(","));
+
+                intent.putExtra(Constants.SABLON, (ArrayList)sablon);
+                getApplicationContext().startService(intent);
+                serviceStatus = Constants.SERVICE_STARTED;
             }
         }
     }
