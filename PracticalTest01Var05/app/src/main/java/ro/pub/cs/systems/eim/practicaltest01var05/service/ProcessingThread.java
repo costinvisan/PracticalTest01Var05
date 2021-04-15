@@ -13,7 +13,7 @@ import ro.pub.cs.systems.eim.practicaltest01var05.general.Constants;
 public class ProcessingThread extends Thread {
     private Context context = null;
     private boolean isRunning = true;
-
+    int count = 0;
     private Random random = new Random();
 
     private ArrayList<String> sablon;
@@ -29,6 +29,7 @@ public class ProcessingThread extends Thread {
         while (isRunning) {
             sendMessage();
             sleep();
+            count = (count + 1) % sablon.size() ;
         }
         Log.d(Constants.PROCESSING_THREAD_TAG, "Thread has stopped!");
     }
@@ -36,13 +37,13 @@ public class ProcessingThread extends Thread {
     private void sendMessage() {
         Intent intent = new Intent();
         intent.setAction(Constants.actionType);
-        intent.putExtra(Constants.BROADCAST_RECEIVER_EXTRA, sablon.remove(0));
+        intent.putExtra(Constants.BROADCAST_RECEIVER_EXTRA, sablon.get(count));
         context.sendBroadcast(intent);
     }
 
     private void sleep() {
         try {
-            Thread.sleep(500);
+            Thread.sleep(5000);
         } catch (InterruptedException interruptedException) {
             interruptedException.printStackTrace();
         }

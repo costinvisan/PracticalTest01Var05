@@ -95,8 +95,9 @@ public class PracticalTest01Var05MainActivity extends Activity {
                     && serviceStatus == Constants.SERVICE_STOPPED) {
                 Intent intent = new Intent(getApplicationContext(), PracticalTest01Var05Service.class);
                 List<String> sablon = Arrays.asList(resutView.getText().toString().split(","));
-
-                intent.putExtra(Constants.SABLON, (ArrayList)sablon);
+                ArrayList<String> list = new ArrayList<>(sablon);
+                list.remove(0);
+                intent.putExtra(Constants.SABLON, list);
                 getApplicationContext().startService(intent);
                 serviceStatus = Constants.SERVICE_STARTED;
             }
@@ -128,6 +129,7 @@ public class PracticalTest01Var05MainActivity extends Activity {
                         Toast.LENGTH_LONG).show();
             }
         }
+        intentFilter.addAction(Constants.actionType);
     }
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
