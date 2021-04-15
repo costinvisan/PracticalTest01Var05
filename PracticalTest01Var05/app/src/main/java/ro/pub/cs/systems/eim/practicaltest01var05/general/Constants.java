@@ -7,5 +7,6 @@ public class Constants {
     final public static String BOTTOM_RIGHT = "Bottom Right";
     final public static String CENTER = "Center";
     final public static String COUNT = "count";
-
+    final public static String RESULT_OPERATION = "resultOperation";
+    final public static int SECONDARY_ACTIVITY_REQUEST_CODE = 1;
 }

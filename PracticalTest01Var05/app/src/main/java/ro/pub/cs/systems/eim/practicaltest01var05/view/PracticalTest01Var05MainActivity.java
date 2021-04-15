@@ -1,6 +1,7 @@
 package ro.pub.cs.systems.eim.practicaltest01var05.view;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -43,6 +44,11 @@ public class PracticalTest01Var05MainActivity extends Activity {
                     resutView.setText(resutView.getText().toString() +  ", " + Constants.CENTER);
                     count++;
                     break;
+                case R.id.navigate_to_secondary_activity_button:
+                    Intent intent = new Intent(getApplicationContext(), PracticalTest01Var05SecondaryActivity.class);
+                    intent.putExtra(Constants.RESULT_OPERATION, resutView.getText().toString());
+                    startActivityForResult(intent, Constants.SECONDARY_ACTIVITY_REQUEST_CODE);
+                    break;
             }
         }
     }
@@ -64,6 +70,7 @@ public class PracticalTest01Var05MainActivity extends Activity {
         bottomRighButton.setOnClickListener(buttonClickListener);
         bottomLeftButton.setOnClickListener(buttonClickListener);
         centerButton.setOnClickListener(buttonClickListener);
+        navigateToSecondaryActivityButton.setOnClickListener(buttonClickListener);
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(Constants.COUNT)) {
                 Toast.makeText(
@@ -84,5 +91,12 @@ public class PracticalTest01Var05MainActivity extends Activity {
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putInt(Constants.COUNT, count);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == Constants.SECONDARY_ACTIVITY_REQUEST_CODE) {
+            Toast.makeText(this, "The activity returned with result " + resultCode, Toast.LENGTH_LONG).show();
+        }
     }
 }

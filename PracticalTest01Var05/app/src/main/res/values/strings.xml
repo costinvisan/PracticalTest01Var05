@@ -6,5 +6,7 @@
     <string name="bottom_left_button">Bottom Left</string>
     <string name="bottom_right_button">bottom Right</string>
     <string name="center_button">Center</string>
+    <string name="verify">Verify</string>
+    <string name="cancel">Cancel</string>
 
 </resources>
