@@ -6,4 +6,6 @@ public class Constants {
     final public static String BOTTOM_LEFT = "Bottom Left";
     final public static String BOTTOM_RIGHT = "Bottom Right";
     final public static String CENTER = "Center";
+    final public static String COUNT = "count";
+
 }
